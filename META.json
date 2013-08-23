@@ -1,6 +1,6 @@
 {
     "name": "WWW-Scraper-ISBN-BarnesNoble_Driver",
-    "version": "0.14",
+    "version": "0.15",
     "abstract": "Search driver for the Barnes and Noble online book catalog",
     "author": ["Barbie <barbie@cpan.org>"],
 
@@ -29,6 +29,7 @@
         },
         "test" : {
             "requires": {
+                "Data::Dumper": "0",
                 "IO::File": "0",
                 "Test::More": "0.70"
             },
@@ -44,7 +45,7 @@
     "provides": {
         "WWW::Scraper::ISBN::BarnesNoble_Driver": {
             "file": "lib/WWW/Scraper/ISBN/BarnesNoble_Driver.pm",
-            "version": "0.14"
+            "version": "0.15"
         }
     },
     "no_index": {

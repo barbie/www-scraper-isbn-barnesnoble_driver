@@ -1,6 +1,7 @@
 #!/usr/bin/perl -w
 use strict;
 
+use Data::Dumper;
 use Test::More tests => 21;
 use WWW::Scraper::ISBN;
 

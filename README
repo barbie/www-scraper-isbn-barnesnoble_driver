@@ -19,13 +19,14 @@ DEPENDENCIES
 
 This module requires these modules:
 
+  WWW::Mechanize
   WWW::Scraper::ISBN
   WWW::Scraper::ISBN::Record
   WWW::Scraper::ISBN::Driver
-  WWW::Mechanize
 
 For testing the module requires these modules:
 
+  Data::Dumper
   IO::File
   Test::More
 

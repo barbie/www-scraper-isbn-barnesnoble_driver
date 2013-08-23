@@ -1,5 +1,8 @@
 Revision history for Perl extension WWW-Scraper-ISBN-BarnesNoble_Driver.
 
+0.15    2013-03-17
+        - Data::Dumper used in tests.
+
 0.14    2013-03-10
         - exposed depth values.
         - added isbn-check.pl to examples.
