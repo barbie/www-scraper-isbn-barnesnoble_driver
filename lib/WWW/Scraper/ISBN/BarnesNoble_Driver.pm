@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use vars qw($VERSION @ISA);
-$VERSION = '0.09';
+$VERSION = '0.10';
 
 #--------------------------------------------------------------------------
 
@@ -115,17 +115,17 @@ sub search {
 #print STDERR "\n# html=[\n$html\n]\n";
 
     my $data;
-    ($data->{isbn13})           = $html =~ m!<li class="isbn">ISBN-13: <a class="isbn-a">([^<]+)</a></li>!si;
-    ($data->{isbn10})           = $html =~ m!<li class="isbn">ISBN: <a class="isbn-a">([^<]+)</a></li>!si;
-    ($data->{publisher})        = $html =~ m!<li class="publisher">Publisher:([^<]+)</li>!si;
-    ($data->{pubdate})          = $html =~ m!<li class="pubDate">Pub. Date:([^<]+)</li>!si;
-    ($data->{title},$data->{author})            
-                                = $html =~ m!<div class="w-box wgt-productTitle"[^>]+>\s*<h1>([^<]+)<em class="nl">\s*by\s*(.*?)\s*</em>\s*</h1>!si;
+    ($data->{isbn13})           = $html =~ m!<li[^>]*>ISBN-13:\s*<a class="isbn-a">([^<]+)</a></li>!si;
+    ($data->{isbn10})           = $html =~ m!<li[^>]*>ISBN:\s*<a class="isbn-a">([^<]+)</a></li>!si;
+    ($data->{publisher})        = $html =~ m!<li[^>]*>Publisher:([^<]+)</li>!si;
+    ($data->{pubdate})          = $html =~ m!<li[^>]*>Pub. Date:([^<]+)</li>!si;
+    ($data->{title})            = $html =~ m!<meta property="og:title" content="([^"]*)">!si;
+    ($data->{author})           = $html =~ m!<title>[^\|]+\|\s*.*? by ([^\|]+) \|[^<]+</title>!si;
     ($data->{binding},$data->{pages})          
-                                = $html =~ m!<li class="productFormat">Format:\s*([^,]+)\s*,\s*([^<]+)pp\s*</li>!si;
+                                = $html =~ m!<li[^>]*>Format:\s*([^,]+)\s*,\s*([^<]+)pp\s*</li>!si;
     ($data->{image})            = $html =~ m!<meta property="og:image" content="([^"]+)">!si;
     ($data->{thumb})            = $html =~ m!<meta property="og:image" content="([^"]+)">!si;
-    ($data->{description})      = $html =~ m!<h3>Synopsis</h3>(?:\s*|<p>)*([^<]+)!si;
+    ($data->{description})      = $html =~ m!<div class="full-review"[^>]+>\s*<div[^>]+>\s*</div>\s*(.*?)</div>!si;
 
     # currently not provided
     ($data->{width})            = $html =~ m!<span class="bold ">Width:\s*</span><span>([^<]+)</span>!si;

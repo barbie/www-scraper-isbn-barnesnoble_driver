@@ -1,5 +1,8 @@
 Revision history for Perl extension WWW-Scraper-ISBN-BarnesNoble_Driver.
 
+0.10    28/06/2011
+        - updated due to page reformatting.
+
 0.09    23/05/2011
         - updated link test again.
 
