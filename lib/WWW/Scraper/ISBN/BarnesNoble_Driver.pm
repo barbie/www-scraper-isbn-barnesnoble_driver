@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use vars qw($VERSION @ISA);
-$VERSION = '0.13';
+$VERSION = '0.14';
 
 #--------------------------------------------------------------------------
 
@@ -75,6 +75,7 @@ a valid page is returned, the following fields are returned via the book hash:
   weight        (if known) (in grammes)
   width         (if known) (in millimetres)
   height        (if known) (in millimetres)
+  depth         (if known) (in millimetres)
 
 The book_link and image_link refer back to the Barnes and Noble website.
 
@@ -127,12 +128,13 @@ sub search {
     ($data->{image})            = $html =~ m!<meta property="og:image" content="([^"]+)"[^>]*>!si;
     ($data->{thumb})            = $html =~ m!<meta property="og:image" content="([^"]+)"[^>]*>!si;
     ($data->{description})      = $html =~ m!product-commentary-overview-1.*?<h3>Overview</h3>\s*(.*?)\s*</div>\s*</section>!si;
-    ($data->{width},$data->{height})
+    ($data->{width},$data->{height},$data->{depth})
                                 = $html =~ m!<span>Product dimensions:\s*</span>([\d.]+)\s*\(w\)\s*x\s*([\d.]+)\s*\(h\)\s*x\s*([\d.]+)\s*\(d\)</li>!si;
 
     # currently not provided
     ($data->{weight})           = $html =~ m!<span class="bold ">Weight:\s*</span><span>([^<]+)</span>!s;
 
+    $data->{depth}  = int($data->{depth}  * IN2MM)  if($data->{depth});
     $data->{width}  = int($data->{width}  * IN2MM)  if($data->{width});
     $data->{height} = int($data->{height} * IN2MM)  if($data->{height});
     $data->{weight} = int($data->{weight})  if($data->{weight});
@@ -180,7 +182,9 @@ sub search {
 		'pages'		    => $data->{pages},
 		'weight'		=> $data->{weight},
 		'width'		    => $data->{width},
-		'height'		=> $data->{height}
+		'height'		=> $data->{height},
+		'depth'		    => $data->{depth},
+        'html'          => $html
 	};
 
 #use Data::Dumper;
@@ -300,9 +304,9 @@ be forthcoming, please feel free to (politely) remind me.
 
 =head1 COPYRIGHT & LICENSE
 
-  Copyright (C) 2010-2012 Barbie for Miss Barbell Productions
+  Copyright (C) 2010-2013 Barbie for Miss Barbell Productions
 
-  This module is free software; you can redistribute it and/or
+  This distribution is free software; you can redistribute it and/or
   modify it under the Artistic Licence v2.
 
 =cut
