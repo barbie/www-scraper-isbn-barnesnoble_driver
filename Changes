@@ -1,5 +1,8 @@
 Revision history for Perl extension WWW-Scraper-ISBN-BarnesNoble_Driver.
 
+0.03	01/12/2010
+        - improved validation for ISBN/EAN13.
+
 0.02	29/11/2010
         - fix to field cleanup code for non-existent field values.
         - slight alteration to regex for description.

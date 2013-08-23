@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use vars qw($VERSION @ISA);
-$VERSION = '0.02';
+$VERSION = '0.03';
 
 #--------------------------------------------------------------------------
 
@@ -85,9 +85,11 @@ sub search {
 	$self->found(0);
 	$self->book(undef);
 
-    my $ean = convert_to_ean13($isbn);
-
-	return $self->handler("Invalid ISBN specified [$isbn]")   unless($ean);
+    # validate and convert into EAN13 format
+    my $ean = $self->convert_to_ean13($isbn);
+    return $self->handler("Invalid ISBN specified [$isbn]")   
+        if(!$ean || (length $isbn == 13 && $isbn ne $ean)
+                 || (length $isbn == 10 && $isbn ne $self->convert_to_isbn10($ean)));
 
 	my $mech = WWW::Mechanize->new();
     $mech->agent_alias( 'Linux Mozilla' );
@@ -189,17 +191,32 @@ sub search {
 
 =item C<convert_to_ean13()>
 
-Given a 10 character ISBN, this method will return the equivilent 13 digit
+Given a 10/13 character ISBN, this function will return the correct 13 digit
 ISBN, also known as EAN13.
+
+=item C<convert_to_isbn10()>
+
+Given a 10/13 character ISBN, this function will return the correct 10 digit 
+ISBN.
 
 =back
 
 =cut
 
 sub convert_to_ean13 {
+	my $self = shift;
     my $isbn = shift;
-    return $isbn    if($isbn =~ /^\d{13}$/);
-    return          unless($isbn =~ /^(\d{10}|\d{9}X)$/);
+    my $prefix;
+
+    return  unless(length $isbn == 10 || length $isbn == 13);
+
+    if(length $isbn == 13) {
+        return  if($isbn !~ /^(978|979)(\d{10})$/);
+        ($prefix,$isbn) = ($1,$2);
+    } else {
+        return  if($isbn !~ /^(\d{10}|\d{9}X)$/);
+        $prefix = '978';
+    }
 
     my $isbn13 = '978' . $isbn;
     chop($isbn13);
@@ -215,6 +232,34 @@ sub convert_to_ean13 {
     $csum = 10 - $csum  if($csum != 0);
 
     return $isbn13 . $csum;
+}
+
+sub convert_to_isbn10 {
+	my $self = shift;
+    my $ean  = shift;
+    my ($isbn,$isbn10);
+
+    return  unless(length $ean == 10 || length $ean == 13);
+
+    if(length $ean == 13) {
+        return  if($ean !~ /^(?:978|979)(\d{9})\d$/);
+        ($isbn,$isbn10) = ($1,$1);
+    } else {
+        return  if($ean !~ /^(\d{9})[\dX]$/);
+        ($isbn,$isbn10) = ($1,$1);
+    }
+
+	return  if($isbn < 0 or $isbn > 999999999);
+
+	my ($csum, $pos, $digit) = (0, 0, 0);
+    for ($pos = 9; $pos > 0; $pos--) {
+        $digit = $isbn % 10;
+        $isbn /= 10;             # Decimal shift ISBN for next time 
+        $csum += ($pos * $digit);
+    }
+    $csum %= 11;
+    $csum = 'X'   if ($csum == 10);
+    return $isbn10 . $csum;
 }
 
 1;
