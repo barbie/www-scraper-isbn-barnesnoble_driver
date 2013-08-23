@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use vars qw($VERSION @ISA);
-$VERSION = '0.10';
+$VERSION = '0.11';
 
 #--------------------------------------------------------------------------
 
@@ -39,6 +39,7 @@ use WWW::Mechanize;
 
 use constant	REFERER	=> 'http://www.barnesandnoble.com/';
 use constant	SEARCH	=> 'http://www.barnesandnoble.com/include/quicksearch_newSearch.asp?page=index&prod=univ&choice=allproducts&query=%s&flag=False&ATL_lid=hu0MIVVMgy&ATL_userid=hu0MIVVMgy&ATL_sid=v24Vd2sM16&ATL_seqnum=5';
+use constant	IN2MM   => 25.4;        # number of inches in a millimetre (mm)
 
 #--------------------------------------------------------------------------
 
@@ -115,25 +116,25 @@ sub search {
 #print STDERR "\n# html=[\n$html\n]\n";
 
     my $data;
-    ($data->{isbn13})           = $html =~ m!<li[^>]*>ISBN-13:\s*<a class="isbn-a">([^<]+)</a></li>!si;
-    ($data->{isbn10})           = $html =~ m!<li[^>]*>ISBN:\s*<a class="isbn-a">([^<]+)</a></li>!si;
-    ($data->{publisher})        = $html =~ m!<li[^>]*>Publisher:([^<]+)</li>!si;
-    ($data->{pubdate})          = $html =~ m!<li[^>]*>Pub. Date:([^<]+)</li>!si;
-    ($data->{title})            = $html =~ m!<meta property="og:title" content="([^"]*)">!si;
-    ($data->{author})           = $html =~ m!<title>[^\|]+\|\s*.*? by ([^\|]+) \|[^<]+</title>!si;
-    ($data->{binding},$data->{pages})          
-                                = $html =~ m!<li[^>]*>Format:\s*([^,]+)\s*,\s*([^<]+)pp\s*</li>!si;
-    ($data->{image})            = $html =~ m!<meta property="og:image" content="([^"]+)">!si;
-    ($data->{thumb})            = $html =~ m!<meta property="og:image" content="([^"]+)">!si;
-    ($data->{description})      = $html =~ m!<div class="full-review"[^>]+>\s*<div[^>]+>\s*</div>\s*(.*?)</div>!si;
+    ($data->{isbn10})           = $self->convert_to_isbn10($ean);
+    ($data->{isbn13})           = $html =~ m!<span>ISBN-13:</span>\s*(\d+)!si;
+    ($data->{publisher})        = $html =~ m!<span>Publisher: </span>\s*([^<]+)\s*</li>!si;
+    ($data->{pubdate})          = $html =~ m!<span>Publication date: </span>\s*([^<]+)\s*</li>!si;
+    ($data->{title})            = $html =~ m!<meta property="og:title" content="([^"]*)"[^>]*>!si;
+    ($data->{author})           = $html =~ m!<ul class="contributors">(.*?)</ul>!si;
+    ($data->{pages})            = $html =~ m!<span>Pages: </span>\s*(.*?)\s*</li>!si;
+    ($data->{binding})          = $html =~ m!<title>[^\|]+\|[^\|]+\|\s*(.*?)\s*</title>!si;
+    ($data->{image})            = $html =~ m!<meta property="og:image" content="([^"]+)"[^>]*>!si;
+    ($data->{thumb})            = $html =~ m!<meta property="og:image" content="([^"]+)"[^>]*>!si;
+    ($data->{description})      = $html =~ m!product-commentary-overview-1.*?<h3>Overview</h3>\s*(.*?)\s*</div>\s*</section>!si;
+    ($data->{width},$data->{height})
+                                = $html =~ m!<span>Product dimensions:\s*</span>([\d.]+)\s*\(w\)\s*x\s*([\d.]+)\s*\(h\)\s*x\s*([\d.]+)\s*\(d\)</li>!si;
 
     # currently not provided
-    ($data->{width})            = $html =~ m!<span class="bold ">Width:\s*</span><span>([^<]+)</span>!si;
-    ($data->{height})           = $html =~ m!<span class="bold ">Height:\s*</span><span>([^<]+)</span>!si;
     ($data->{weight})           = $html =~ m!<span class="bold ">Weight:\s*</span><span>([^<]+)</span>!s;
 
-    $data->{width}  = int($data->{width})   if($data->{width});
-    $data->{height} = int($data->{height})  if($data->{height});
+    $data->{width}  = int($data->{width}  * IN2MM)  if($data->{width});
+    $data->{height} = int($data->{height} * IN2MM)  if($data->{height});
     $data->{weight} = int($data->{weight})  if($data->{weight});
 
     for(qw(author publisher description)) {
@@ -142,8 +143,9 @@ sub search {
         $data->{$_} =~ s!<[^>]+>!!g;
     }
 
-    if($data->{image}) {
-        $data->{thumb} = $data->{image};
+    if($data->{author}) {
+        $data->{author} =~ s!^\s*by\s*!!;
+        $data->{author} =~ s!,\s*!, !g;
     }
 
 #use Data::Dumper;
@@ -288,7 +290,7 @@ RT system (http://rt.cpan.org/Public/Dist/Display.html?Name=WWW-Scraper-ISBN-Bar
 However, it would help greatly if you are able to pinpoint problems or even
 supply a patch.
 
-Fixes are dependant upon their severity and my availablity. Should a fix not
+Fixes are dependent upon their severity and my availability. Should a fix not
 be forthcoming, please feel free to (politely) remind me.
 
 =head1 AUTHOR
@@ -298,7 +300,7 @@ be forthcoming, please feel free to (politely) remind me.
 
 =head1 COPYRIGHT & LICENSE
 
-  Copyright (C) 2010,2011 Barbie for Miss Barbell Productions
+  Copyright (C) 2010-2012 Barbie for Miss Barbell Productions
 
   This module is free software; you can redistribute it and/or
   modify it under the Artistic Licence v2.

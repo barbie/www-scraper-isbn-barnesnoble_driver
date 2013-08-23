@@ -19,16 +19,16 @@ my %tests = (
         [ 'like',   'title',        qr!Touching from a Distance!],
         [ 'like',   'author',       qr!Curtis!                  ],
         [ 'is',     'publisher',    'Faber and Faber'           ],
-        [ 'is',     'pubdate',      'October 2007'              ],
+        [ 'is',     'pubdate',      '10/28/2007'                ],
         [ 'is',     'binding',      'Paperback'                 ],
         [ 'is',     'pages',        240                         ],
-        [ 'is',     'width',        undef                       ],
-        [ 'is',     'height',       undef                       ],
+        [ 'is',     'width',        127                         ],
+        [ 'is',     'height',       195                         ],
         [ 'is',     'weight',       undef                       ],
-        [ 'is',     'image_link',   'http://img2.imagesbn.com/images/27350000/27350367.JPG' ],
-        [ 'is',     'thumb_link',   'http://img2.imagesbn.com/images/27350000/27350367.JPG' ],
+        [ 'like',   'image_link',   qr|http://img2.imagesbn.com/images/\d+/\d+.JPG| ],
+        [ 'like',   'thumb_link',   qr|http://img2.imagesbn.com/images/\d+/\d+.JPG| ],
         [ 'like',   'description',  qr|Joy Division|            ],
-        [ 'like',   'book_link',    qr|search.barnesandnoble.com/.*?9780571239566| ]
+        [ 'like',   'book_link',    qr|\w+.barnesandnoble.com/.*?9780571239566| ]
     ],
 );
 
