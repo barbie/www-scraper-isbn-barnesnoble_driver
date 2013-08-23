@@ -1,7 +1,6 @@
 #!/usr/bin/perl -w
 use strict;
 
-use lib './t';
 use Test::More tests => 20;
 use WWW::Scraper::ISBN;
 
@@ -25,8 +24,8 @@ my %tests = (
         [ 'is',     'width',        127                         ],
         [ 'is',     'height',       195                         ],
         [ 'is',     'weight',       undef                       ],
-        [ 'like',   'image_link',   qr|http://img2.imagesbn.com/images/\d+/\d+.JPG| ],
-        [ 'like',   'thumb_link',   qr|http://img2.imagesbn.com/images/\d+/\d+.JPG| ],
+        [ 'like',   'image_link',   qr|http://images.barnesandnoble.com/pimages/gresources/[-\w]+.JPG| ],
+        [ 'like',   'thumb_link',   qr|http://images.barnesandnoble.com/pimages/gresources/[-\w]+.JPG| ],
         [ 'like',   'description',  qr|Joy Division|            ],
         [ 'like',   'book_link',    qr|\w+.barnesandnoble.com/.*?9780571239566| ]
     ],
