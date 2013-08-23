@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use vars qw($VERSION @ISA);
-$VERSION = '0.15';
+$VERSION = '0.16';
 
 #--------------------------------------------------------------------------
 
@@ -124,7 +124,7 @@ sub search {
     ($data->{title})            = $html =~ m!<meta property="og:title" content="([^"]*)"[^>]*>!si;
     ($data->{author})           = $html =~ m!<ul class="contributors\s*">(.*?)</ul>!si;
     ($data->{pages})            = $html =~ m!<span>Pages: </span>\s*(.*?)\s*</li>!si;
-    ($data->{binding})          = $html =~ m!<title>[^\|]+\|[^\|]+\|\s*(.*?)\s*</title>!si;
+    ($data->{binding})          = $html =~ m!<title>[^\|]+\|[^\|]+\|\s*(.*?)\s*\|[^<]+</title>!si;
     ($data->{image})            = $html =~ m!<meta property="og:image" content="([^"]+)"[^>]*>!si;
     ($data->{thumb})            = $html =~ m!<meta property="og:image" content="([^"]+)"[^>]*>!si;
     ($data->{description})      = $html =~ m!product-commentary-overview-1.*?<h3>Overview</h3>\s*(.*?)\s*</div>\s*</section>!si;
