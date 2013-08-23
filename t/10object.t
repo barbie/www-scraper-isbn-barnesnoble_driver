@@ -17,7 +17,7 @@ my %tests = (
         [ 'is',     'isbn13',       '9780571239566'             ],
         [ 'is',     'ean13',        '9780571239566'             ],
         [ 'like',   'title',        qr!Touching from a Distance!],
-        [ 'like',   'author',       qr!Deborah Curtis!          ],
+        [ 'like',   'author',       qr!Curtis!                  ],
         [ 'is',     'publisher',    'Faber and Faber'           ],
         [ 'is',     'pubdate',      'October 2007'              ],
         [ 'is',     'binding',      'Paperback'                 ],
@@ -27,7 +27,7 @@ my %tests = (
         [ 'is',     'weight',       undef                       ],
         [ 'is',     'image_link',   'http://img2.imagesbn.com/images/27350000/27350367.JPG' ],
         [ 'is',     'thumb_link',   'http://img2.imagesbn.com/images/27350000/27350367.JPG' ],
-        [ 'like',   'description',  qr|The only in-depth biographical account of the lead singer of Joy Division| ],
+        [ 'like',   'description',  qr|Joy Division|            ],
         [ 'is',     'book_link',    'http://search.barnesandnoble.com/books/product.aspx?EAN=9780571239566' ]
     ],
 );
@@ -42,7 +42,7 @@ my $scraper = WWW::Scraper::ISBN->new();
 isa_ok($scraper,'WWW::Scraper::ISBN');
 
 SKIP: {
-    skip "Can't see a network connection", $tests+1   if(pingtest($CHECK_DOMAIN));
+    skip "Can't see a network connection", $tests   if(pingtest($CHECK_DOMAIN));
 
     $scraper->drivers($DRIVER);
 
