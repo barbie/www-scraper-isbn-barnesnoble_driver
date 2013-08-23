@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use vars qw($VERSION @ISA);
-$VERSION = '0.01';
+$VERSION = '0.02';
 
 #--------------------------------------------------------------------------
 
@@ -123,7 +123,7 @@ sub search {
                                 = $html =~ m!<li class="productFormat">Format:\s*([^,]+)\s*,\s*([^<]+)pp\s*</li>!si;
     ($data->{image})            = $html =~ m!<meta property="og:image" content="([^"]+)">!si;
     ($data->{thumb})            = $html =~ m!<meta property="og:image" content="([^"]+)">!si;
-    ($data->{description})      = $html =~ m!<h3>Synopsis</h3> <p><p>([^<]+)!si;
+    ($data->{description})      = $html =~ m!<h3>Synopsis</h3>(?:\s*|<p>)*([^<]+)!si;
 
     # currently not provided
     ($data->{width})            = $html =~ m!<span class="bold ">Width:\s*</span><span>([^<]+)</span>!si;
@@ -134,8 +134,11 @@ sub search {
     $data->{height} = int($data->{height})  if($data->{height});
     $data->{weight} = int($data->{weight})  if($data->{weight});
 
-    $data->{$_} =~ s![ \t\n\r]+! !g for(qw(author publisher description));
-    $data->{$_} =~ s!<[^>]+>!!g     for(qw(author publisher description));
+    for(qw(author publisher description)) {
+        next    unless($data->{$_});
+        $data->{$_} =~ s![ \t\n\r]+! !g;
+        $data->{$_} =~ s!<[^>]+>!!g;
+    }
 
     if($data->{image}) {
         $data->{thumb} = $data->{image};
