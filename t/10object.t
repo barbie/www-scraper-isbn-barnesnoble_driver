@@ -28,7 +28,7 @@ my %tests = (
         [ 'is',     'image_link',   'http://img2.imagesbn.com/images/27350000/27350367.JPG' ],
         [ 'is',     'thumb_link',   'http://img2.imagesbn.com/images/27350000/27350367.JPG' ],
         [ 'like',   'description',  qr|Joy Division|            ],
-        [ 'like',   'book_link',    qr|search.barnesandnoble.com/Touching-from-a-Distance/Curtis/e/9780571239566| ]
+        [ 'like',   'book_link',    qr|search.barnesandnoble.com/.*?9780571239566| ]
     ],
 );
 
