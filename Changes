@@ -1,5 +1,10 @@
 Revision history for Perl extension WWW-Scraper-ISBN-BarnesNoble_Driver.
 
+0.05    16/02/2011
+        - upgraded to Test::CPAN::Meta::JSON for tests.
+        - added test file for convert subs.
+        - updated regex for author & title extraction.
+
 0.04	14/02/2011
         - removed invalid ISBN test, due to missing Business::ISBN object
           within WWW::Scraper::ISBN ... though works for my other ISBN 

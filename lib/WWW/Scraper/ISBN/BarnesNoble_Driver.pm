@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use vars qw($VERSION @ISA);
-$VERSION = '0.04';
+$VERSION = '0.05';
 
 #--------------------------------------------------------------------------
 
@@ -120,7 +120,7 @@ sub search {
     ($data->{publisher})        = $html =~ m!<li class="publisher">Publisher:([^<]+)</li>!si;
     ($data->{pubdate})          = $html =~ m!<li class="pubDate">Pub. Date:([^<]+)</li>!si;
     ($data->{title},$data->{author})            
-                                = $html =~ m!<div class="w-box wgt-productTitle">\s*<h1>([^<]+)<em class="nl">\s*by\s*(.*?)\s*</em>\s*</h1>!si;
+                                = $html =~ m!<div class="w-box wgt-productTitle"[^>]+>\s*<h1>([^<]+)<em class="nl">\s*by\s*(.*?)\s*</em>\s*</h1>!si;
     ($data->{binding},$data->{pages})          
                                 = $html =~ m!<li class="productFormat">Format:\s*([^,]+)\s*,\s*([^<]+)pp\s*</li>!si;
     ($data->{image})            = $html =~ m!<meta property="og:image" content="([^"]+)">!si;
