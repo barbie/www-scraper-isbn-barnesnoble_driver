@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use vars qw($VERSION @ISA);
-$VERSION = '0.12';
+$VERSION = '0.13';
 
 #--------------------------------------------------------------------------
 
@@ -108,7 +108,7 @@ sub search {
     my $html = $mech->content();
 
 	return $self->handler("Failed to find that book on the Barnes and Noble website. [$isbn]")
-		if($html =~ m!Sorry. We did not find any results!si);
+		if($html =~ m!Sorry. We did not find any results|Sorry, we could not find what you were looking for!si);
     
     $html =~ s/&amp;/&/g;
     $html =~ s/&#0?39;/'/g;
@@ -121,7 +121,7 @@ sub search {
     ($data->{publisher})        = $html =~ m!<span>Publisher: </span>\s*([^<]+)\s*</li>!si;
     ($data->{pubdate})          = $html =~ m!<span>Publication date: </span>\s*([^<]+)\s*</li>!si;
     ($data->{title})            = $html =~ m!<meta property="og:title" content="([^"]*)"[^>]*>!si;
-    ($data->{author})           = $html =~ m!<ul class="contributors">(.*?)</ul>!si;
+    ($data->{author})           = $html =~ m!<ul class="contributors\s*">(.*?)</ul>!si;
     ($data->{pages})            = $html =~ m!<span>Pages: </span>\s*(.*?)\s*</li>!si;
     ($data->{binding})          = $html =~ m!<title>[^\|]+\|[^\|]+\|\s*(.*?)\s*</title>!si;
     ($data->{image})            = $html =~ m!<meta property="og:image" content="([^"]+)"[^>]*>!si;

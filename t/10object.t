@@ -24,8 +24,8 @@ my %tests = (
         [ 'is',     'width',        127                         ],
         [ 'is',     'height',       195                         ],
         [ 'is',     'weight',       undef                       ],
-        [ 'like',   'image_link',   qr|http://images.barnesandnoble.com/pimages/gresources/[-\w]+.JPG| ],
-        [ 'like',   'thumb_link',   qr|http://images.barnesandnoble.com/pimages/gresources/[-\w]+.JPG| ],
+        [ 'like',   'image_link',   qr|http://img1.imagesbn.com/p/\w+.JPG| ],
+        [ 'like',   'thumb_link',   qr|http://img1.imagesbn.com/p/\w+.JPG| ],
         [ 'like',   'description',  qr|Joy Division|            ],
         [ 'like',   'book_link',    qr|\w+.barnesandnoble.com/.*?9780571239566| ]
     ],
