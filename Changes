@@ -1,6 +1,9 @@
-Revision history for Perl extension WWW-Scraper-ISBN-BarnesNoble_Driver.
+Revision history for WWW-Scraper-ISBN-BarnesNoble_Driver
+========================================================
 
-0.16    2013-05-17
+        - added git repository links to metadata.
+
+0.16    2013-05-19
         - updated binding pattern matching due to page layout changes.
 
 0.15    2013-03-17

@@ -36,6 +36,7 @@ no_index:
 resources:
   license:    http://www.perlfoundation.org/artistic_license_2_0
   bugtracker: http://rt.cpan.org/Public/Dist/Display.html?Name=WWW-Scraper-ISBN-BarnesNoble_Driver
+  repository: http://github.com/barbie/www-scraper-isbn-barnesnoble_driver
 
 meta-spec:
    version:   1.4
