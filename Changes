@@ -1,6 +1,8 @@
 Revision history for WWW-Scraper-ISBN-BarnesNoble_Driver
 ========================================================
 
+        - fixed distribution name in META.
+
 0.17    2013-11-17
         - added git repository links to metadata.
 
