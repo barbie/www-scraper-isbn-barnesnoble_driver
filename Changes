@@ -1,6 +1,8 @@
 Revision history for WWW-Scraper-ISBN-BarnesNoble_Driver
 ========================================================
 
+        - extended META test suite.
+
 0.19    2014-10-22
         - fixed license fields in META.json to be lists.
 
