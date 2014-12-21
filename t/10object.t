@@ -2,7 +2,7 @@
 use strict;
 
 use Data::Dumper;
-use Test::More tests => 21;
+use Test::More tests => 41;
 use WWW::Scraper::ISBN;
 
 ###########################################################
@@ -11,25 +11,45 @@ my $DRIVER          = 'BarnesNoble';
 my $CHECK_DOMAIN    = 'www.google.com';
 
 my %tests = (
-    '9780571239566' => [
-        [ 'is',     'isbn',         '9780571239566'             ],
-        [ 'is',     'isbn10',       '0571239560'                ],
-        [ 'is',     'isbn13',       '9780571239566'             ],
-        [ 'is',     'ean13',        '9780571239566'             ],
+    '9780571224814' => [
+        [ 'is',     'isbn',         '9780571224814'             ],
+        [ 'is',     'isbn10',       '0571224814'                ],
+        [ 'is',     'isbn13',       '9780571224814'             ],
+        [ 'is',     'ean13',        '9780571224814'             ],
         [ 'like',   'title',        qr!Touching from a Distance!],
         [ 'like',   'author',       qr!Curtis!                  ],
         [ 'is',     'publisher',    'Faber and Faber'           ],
-        [ 'is',     'pubdate',      '10/28/2007'                ],
+        [ 'like',   'pubdate',      qr!\d+/\d+/\d+!             ],
         [ 'is',     'binding',      'Paperback'                 ],
-        [ 'is',     'pages',        240                         ],
-        [ 'is',     'width',        127                         ],
-        [ 'is',     'height',       195                         ],
+        [ 'is',     'pages',        208                         ],
+        [ 'is',     'width',        124                         ],
+        [ 'is',     'height',       193                         ],
         [ 'is',     'depth',        20                          ],
         [ 'is',     'weight',       undef                       ],
-        [ 'like',   'image_link',   qr|http://img1.imagesbn.com/p/\w+.JPG| ],
-        [ 'like',   'thumb_link',   qr|http://img1.imagesbn.com/p/\w+.JPG| ],
+        [ 'like',   'image_link',   qr|http://img\d+.imagesbn.com/p/\w+.JPG| ],
+        [ 'like',   'thumb_link',   qr|http://img\d+.imagesbn.com/p/\w+.JPG| ],
         [ 'like',   'description',  qr|Joy Division|            ],
-        [ 'like',   'book_link',    qr|\w+.barnesandnoble.com/.*?9780571239566| ]
+        [ 'like',   'book_link',    qr|\w+.barnesandnoble.com/.*?9780571224814| ]
+    ],
+    '9781452138459' => [
+        [ 'is',     'isbn',         '9781452138459'             ],
+        [ 'is',     'isbn10',       '1452138451'                ],
+        [ 'is',     'isbn13',       '9781452138459'             ],
+        [ 'is',     'ean13',        '9781452138459'             ],
+        [ 'like',   'title',        qr!So This is Permanence: Joy Division Lyrics and Notebooks!    ],
+        [ 'is',     'author',       'Ian Curtis, Deborah Curtis (Editor), Jon Savage (Editor)'      ],
+        [ 'is',     'publisher',    'Chronicle Books LLC'       ],
+        [ 'like',   'pubdate',      qr!\d+/\d+/\d+!             ],
+        [ 'is',     'binding',      'Hardcover'                 ],
+        [ 'is',     'pages',        undef                       ],
+        [ 'is',     'width',        208                         ],
+        [ 'is',     'height',       284                         ],
+        [ 'is',     'depth',        27                          ],
+        [ 'is',     'weight',       undef                       ],
+        [ 'like',   'image_link',   qr|http://img\d+.imagesbn.com/p/\w+.JPG| ],
+        [ 'like',   'thumb_link',   qr|http://img\d+.imagesbn.com/p/\w+.JPG| ],
+        [ 'like',   'description',  qr|Joy Division|            ],
+        [ 'like',   'book_link',    qr|\w+.barnesandnoble.com/.*?9781452138459| ]
     ],
 );
 
@@ -57,11 +77,10 @@ SKIP: {
 #    eval { $record = $scraper->search($isbn); };
 #    if($@) {
 #        like($@,qr/Invalid ISBN specified/);
-#    }
-#    elsif($record->found) {
+#    } elsif($record->found) {
 #        ok(0,'Unexpectedly found a non-existent book');
 #    } else {
-#       like($record->error,qr/Invalid ISBN specified|Failed to find that book|website appears to be unavailable/);
+#        like($record->error,qr/Invalid ISBN specified|Failed to find that book|website appears to be unavailable/);
 #    }
 
     for my $isbn (keys %tests) {
