@@ -1,6 +1,10 @@
 Revision history for WWW-Scraper-ISBN-BarnesNoble_Driver
 ========================================================
 
+        - updated pattern matching due to page layout changes.
+        - updated test data, previous examples now out of print.
+        - fix suggested by kratika.io.
+
 0.21    2014-12-25
         - updated test data, previous examples now out of print.
 
